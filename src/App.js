@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Banner from './components/Banner';
 import NavBar from './components/NavBar';
 import TrendingMovies from './components/TrendingMovies';
@@ -12,6 +12,8 @@ import Favourites from './components/Favourites';
 
 const App = () => {
 
+  const [favorites, setFavorites] = useState([]);
+
   return(
     <>
     <Router>
@@ -19,9 +21,9 @@ const App = () => {
       <Routes>
         <Route path='/' element={<> 
           <Banner />
-          <TrendingMovies />
+          <TrendingMovies setFavorites={setFavorites} favorites={favorites}/>
           </>} />
-        <Route path='/favourites' element={<Favourites />} />
+        <Route path='/favourites' element={<Favourites favorites={favorites} />} />
         {/* </Route> */}
       </Routes>
     </Router>

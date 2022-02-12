@@ -4,11 +4,12 @@ import Pagination from './Pagination';
 import axios from "axios";
 import { secret } from '../secret';
 
-const TrendingMovies = () => {
+const TrendingMovies = ({setFavorites, favorites}) => {
 
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
+  const [hoverCard, setHoverCard] = useState(-1);
 
   useEffect(() => {
     (async function(){
@@ -19,8 +20,12 @@ const TrendingMovies = () => {
         setIsLoading(false);
     })();
   }, [pageNumber])
-  
 
+  function addToFavorites(movieId){
+    setFavorites((prev)=>{
+        return [...prev, movieId]
+    })
+  }
 
   function goToNextPage(){
     setPageNumber(pageNumber + 1);
@@ -43,11 +48,25 @@ const TrendingMovies = () => {
             movies.map((e, idx)=>{
                 console.log(e);
             return (
-                <div key={idx} className={`bg-[url(${`https://image.tmdb.org/t/p/w500${e.poster_path}`})] h-52 w-48 md:h-64 md:w-60 bg-cover bg-center rounded-xl flex justify-center items-end cursor-pointer hover:scale-110 ease-in-out duration-300`}>
+                <div key={idx} onMouseEnter={()=>{setHoverCard(idx)}} onMouseLeave={()=>{setHoverCard(-1)}} className={`bg-[url(${`https://image.tmdb.org/t/p/w500${e.poster_path}`})] h-52 w-48 md:h-64 md:w-60 bg-cover bg-center rounded-xl flex justify-center items-end hover:scale-110 ease-in-out duration-300 relative`}>
                     <div className='text-white bg-gray-900 p-[5px] md:p-2 text:sm md:text-lg text-center w-full rounded-b-xl'>{e.title}</div>
-                    <span class="material-icons-round">
-                        star
-                    </span>
+                    <div className='text-yellow-400 absolute top-0 left-0 flex items-center bg-slate-900 rounded-lg px-2'>
+                        <span class="material-icons-round ">
+                            star
+                        </span>
+                        {e.vote_average}
+                    </div>
+                    {
+                    favorites.includes(e.id) 
+                    ?
+                    <div onClick={()=>{addToFavorites(e.id)}} className={`text-3xl cursor-pointer ${hoverCard === idx?"":"hidden"} hover:block bg-gray-900 px-4 p-2 absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] flex items-center rounded-xl`}>
+                        ❌
+                    </div>
+                    :
+                    <div onClick={()=>{addToFavorites(e.id)}} className={`text-3xl cursor-pointer ${hoverCard === idx?"":"hidden"} hover:block bg-gray-900 px-4 p-2 absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] flex items-center rounded-xl`}>
+                        😍
+                    </div>
+                    }
                 </div>
             )
         })}
