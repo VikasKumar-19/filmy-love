@@ -3,6 +3,7 @@ import Pagination from "./Pagination";
 
 const Favourites = () => {
   const genres = [
+      {id: -1, name: "All Genres"},
       { id: 28, name: "Action" },
       { id: 12, name: "Adventure" },
       { id: 16, name: "Animation" },
@@ -32,7 +33,8 @@ const Favourites = () => {
   const [limit, setIsLimit] = useState(5);
   const [filteredMovies, setFilteredMovies] = useState(favorites); //filteredMovies
   const [moviesPerPage, setMoviesPerPage] = useState([]); //this define what movies will be in a particular page
-
+  let totalPages = Math.ceil(filteredMovies.length / limit);
+  
 
   // this if for getting the favorite list  from local storage
 
@@ -48,13 +50,11 @@ const Favourites = () => {
     setFilteredMovies([...favorites]);
   }, [favorites]);
 
-  let totalPages = Math.ceil(favorites.length / limit);
-
   // here we are getting genres for all the favorite movies
 
   useEffect(()=>{
 
-    let allGenreIds = [];
+    let allGenreIds = [-1];
 
     favorites.forEach(({genre_ids})=>{
       genre_ids.forEach((genreId)=>{    
@@ -77,7 +77,8 @@ const Favourites = () => {
   }, [pageNumber, filteredMovies, limit]);
 
   function goToNextPage() {
-    setPageNumber(pageNumber + 1);
+    if(pageNumber < totalPages)
+      setPageNumber(pageNumber + 1);
   }
 
   function goToPreviousPage() {
@@ -145,20 +146,21 @@ const Favourites = () => {
     setFilteredMovies(filtered);
   }
 
-  // console.log(genreIds);
+  function handleGenreFilter(genre){
+    setSelectedGenre(genre.name);
+    let movies = [...favorites];
+    movies = movies.filter((movie)=>{
+      if(genre.id === -1){
+        return true;
+      }
+      return movie.genre_ids.includes(genre.id);
+    });
+    setFilteredMovies(movies);
+  }
 
   return (
     <div>
-      <div className="my-6 px-8 flex flex-wrap gap-x-4 gap-y-4">
-        <button
-          className={`text-lg text-white ${
-            selectedGenre === "All Genres" ? "bg-blue-500" : "bg-slate-400"
-          } px-4 py-2 rounded-xl `}
-          onClick={(e)=>{setSelectedGenre(e.target.textContent)}}
-        >
-          All Genres
-        </button>
-
+      <div className="my-6 px-8 flex flex-wrap gap-x-4 gap-y-4">  
         {genreIds.map((genreId) => {
           let genre = genres.find(({id})=>{
             return genreId === id;
@@ -169,7 +171,7 @@ const Favourites = () => {
               className={`text-lg text-white ${
                 selectedGenre === genre.name ? "bg-blue-500" : "bg-slate-400"
               } px-4 py-2 rounded-xl `}
-              onClick={(e)=>{setSelectedGenre(e.target.textContent)}}
+              onClick={()=>{handleGenreFilter(genre)}}
             >
               {genre.name}
             </button>
@@ -177,7 +179,7 @@ const Favourites = () => {
         })}
       </div>
 
-      <div className="flex flex-wrap justify-center gap-4">
+      <div className="flex flex-wrap justify-center gap-4 my-10">
         <input
           value={searchInput}
           onChange={handleSearchInput}
