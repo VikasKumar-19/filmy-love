@@ -72,7 +72,7 @@ const TrendingMovies = () => {
     }
   }
   
-  console.log(favorites);
+  // console.log(favorites);
   return <>
   <div className='mt-8 md:mt-12'>
     <h2 className='text-center text-pink-600 my-4 md:my-8 text-2xl md:text-3xl font-bold font-[Helvetica]'>Trending Movies</h2>
@@ -87,7 +87,7 @@ const TrendingMovies = () => {
                 <div key={idx} onMouseEnter={()=>{setHoverCard(idx)}} onMouseLeave={()=>{setHoverCard(-1)}} className={`bg-[url(${`https://image.tmdb.org/t/p/w500${e.poster_path}`})] h-52 w-48 md:h-64 md:w-60 bg-cover bg-center rounded-xl flex justify-center items-end hover:scale-110 ease-in-out duration-300 relative`}>
                     <div className='text-white bg-gray-900 p-[5px] md:p-2 text:sm md:text-lg text-center w-full rounded-b-xl'>{e.title}</div>
                     <div className='text-yellow-400 absolute top-0 left-0 flex items-center bg-slate-900 rounded-lg px-2'>
-                        <span class="material-icons-round ">
+                        <span className="material-icons-round ">
                             star
                         </span>
                         {e.vote_average}
