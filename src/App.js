@@ -12,8 +12,6 @@ import Favourites from './components/Favourites';
 
 const App = () => {
 
-  const [favorites, setFavorites] = useState([]);
-
   return(
     <>
     <Router>
@@ -21,9 +19,9 @@ const App = () => {
       <Routes>
         <Route path='/' element={<> 
           <Banner />
-          <TrendingMovies setFavorites={setFavorites} favorites={favorites}/>
+          <TrendingMovies />
           </>} />
-        <Route path='/favourites' element={<Favourites favorites={favorites} />} />
+        <Route path='/favourites' element={<Favourites />} />
         {/* </Route> */}
       </Routes>
     </Router>
