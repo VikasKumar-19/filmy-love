@@ -53,9 +53,7 @@ const TrendingMovies = () => {
     let favorite_list = localStorage.getItem("favorite_list");
     favorite_list = JSON.parse(favorite_list);
     let idx = favorite_list.findIndex((movieObj)=>{
-      if(movieObj.id === movie.id){
-        return true;
-      }
+      return movieObj.id === movie.id
     })
     favorite_list.splice(idx, 1);
     setFavorites(favorite_list);
