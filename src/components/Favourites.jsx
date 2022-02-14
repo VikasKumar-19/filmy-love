@@ -82,7 +82,7 @@ const Favourites = () => {
   }
 
   function goToPreviousPage() {
-    if(pageNumber > 0)
+    if(pageNumber > 1)
       setPageNumber(pageNumber - 1);
   }
 
